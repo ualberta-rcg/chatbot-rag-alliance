@@ -1,3 +1,17 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: slurm-chat
+type: Opaque
+stringData:
+  SECRET_KEY: "dummy-secret-key-123456"
+  GOOGLE_AI_API_KEY: "dummy-google-api-key"
+  ANTHROPIC_API_KEY: "dummy-anthropic-api-key"
+  GROQ_API_KEY: "dummy-groq-api-key"
+  OPENAI_API_KEY: "dummy-openai-api-key"
+  RAGIE_API_KEY: "dummy-ragie-api-key"
+  RAGFLOW_API_KEY: "dummy-ragflow-api-key"
 ---
 # Deployment for the Slurm Chat application
 apiVersion: apps/v1
@@ -28,10 +42,13 @@ spec:
             value: "deepseek-r1:671b" # Replace with your value
           - name: AI_MODEL_B
             value: "command-r-plus:latest" # Replace with your value
-          - name: SECRET_KEY
-            value: "123456586789698798798"
           - name: RAGFLOW_API_URL
             value: "https://1.2.3.4"
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: SECRET_KEY
           - name: GOOGLE_AI_API_KEY
             valueFrom:
               secretKeyRef:
@@ -64,7 +81,6 @@ spec:
                 key: RAGFLOW_API_KEY
         ports:
         - containerPort: 8000
-
 ---
 # Service to expose the application internally
 apiVersion: v1
@@ -81,7 +97,6 @@ spec:
     protocol: TCP
     name: http
   type: ClusterIP
-
 ---
 # Certificate for SSL via cert-manager
 apiVersion: cert-manager.io/v1
@@ -97,7 +112,6 @@ spec:
   commonName: chat.cluster.paice-ua.com
   dnsNames:
     - chat.cluster.paice-ua.com
-
 ---
 # Ingress for public access with SSL
 apiVersion: networking.k8s.io/v1
