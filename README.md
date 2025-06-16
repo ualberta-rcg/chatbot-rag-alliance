@@ -42,7 +42,7 @@ This container includes:
 
 ## 🛠️ GitHub Actions - CI/CD Pipeline
 
-This project includes a GitHub Actions workflow: `.github/workflows/deploy-warewulf-proxmox.yml`.
+This project includes a GitHub Actions workflow: `.github/workflows/build-chatbot-rag-alliance.yml`.
 
 ### 🔄 What It Does
 
@@ -57,7 +57,7 @@ To enable pushing to your Docker Hub:
 1. Go to your fork's GitHub repo → **Settings** → **Secrets and variables** → **Actions**
 2. Add the following:
 
-   * `DOCKER_HUB_REPO` → your Docker Hub repo. In this case: *rkhoja/warewulf-proxmox* 
+   * `DOCKER_HUB_REPO` → your Docker Hub repo. In this case: *rkhoja/chatbot-rag-alliance* 
    * `DOCKER_HUB_USER` → your Docker Hub username
    * `DOCKER_HUB_TOKEN` → create a [Docker Hub access token](https://hub.docker.com/settings/security)
 
