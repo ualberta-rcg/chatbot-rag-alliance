@@ -2,7 +2,7 @@
 
 # Helpy – Alliance Cluster Concierge Chatbot
 
-[![CI/CD](https://github.com/ualberta-rcg/chatbot-rag-alliance/actions/workflows/deploy-chatbot-rag-alliance.yml/badge.svg)](https://github.com/ualberta-rcg/chatbot-rag-alliance/actions/workflows/deploy-chatbot-rag-alliance.yml)
+[![CI/CD](https://github.com/ualberta-rcg/chatbot-rag-alliance/actions/workflows/build-chatbot-rag-alliance.yml/badge.svg)](https://github.com/ualberta-rcg/chatbot-rag-alliance/actions/workflows/build-chatbot-rag-alliance.yml)
 ![Docker Pulls](https://img.shields.io/docker/pulls/rkhoja/chatbot-rag-alliance?style=flat-square)
 ![Docker Image Size](https://img.shields.io/docker/image-size/rkhoja/chatbot-rag-alliance/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
