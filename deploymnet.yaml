@@ -1,0 +1,155 @@
+---
+# Namespace for Slurm Chat
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: slurm-chat
+
+---
+# Secret to store sensitive API keys
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+  namespace: slurm-chat
+type: Opaque
+data:
+  # Replace these with your actual Base64-encoded values
+  GOOGLE_AI_API_KEY: <base64-encoded-google-ai-api-key>
+  ANTHROPIC_API_KEY: <base64-encoded-anthropic-api-key>
+  GROQ_API_KEY: <base64-encoded-groq-api-key>
+  OPENAI_API_KEY: <base64-encoded-openai-api-key>
+  RAGIE_API_KEY: <base64-encoded-ragie-api-key>
+
+---
+# Deployment for the Slurm Chat application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slurm-chat-deployment
+  namespace: slurm-chat
+  labels:
+    app: slurm-chat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slurm-chat
+  template:
+    metadata:
+      labels:
+        app: slurm-chat
+    spec:
+      containers:
+      - name: slurm-chat
+        image: rkhoja/slurm-chat:latest
+        imagePullPolicy: Always
+        env:
+          - name: AI_PROVIDER
+            value: "ANTHROPIC" # Replace with your value
+          - name: AI_MODEL_A
+            value: "claude-3-5-sonnet-20241022" # Replace with your value
+          - name: AI_MODEL_B
+            value: "claude-3-5-haiku-20241022" # Replace with your value
+          - name: GOOGLE_AI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: GOOGLE_AI_API_KEY
+          - name: ANTHROPIC_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: ANTHROPIC_API_KEY
+          - name: GROQ_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: GROQ_API_KEY
+          - name: OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: OPENAI_API_KEY
+          - name: RAGIE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: RAGIE_API_KEY
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          timeoutSeconds: 2
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 2
+          failureThreshold: 3
+        terminationGracePeriodSeconds: 5
+
+---
+# Service to expose the application internally
+apiVersion: v1
+kind: Service
+metadata:
+  name: slurm-chat-service
+  namespace: slurm-chat
+spec:
+  selector:
+    app: slurm-chat
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  type: ClusterIP
+
+---
+# Certificate for SSL via cert-manager
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: chat-cluster-paice-ua-com
+  namespace: slurm-chat
+spec:
+  secretName: chat-cluster-paice-ua-com-tls
+  issuerRef:
+    name: letsencrypt-dns # Assumes this ClusterIssuer exists
+    kind: ClusterIssuer
+  commonName: chat.cluster.paice-ua.com
+  dnsNames:
+    - chat.cluster.paice-ua.com
+
+---
+# Ingress for public access with SSL
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: slurm-chat-ingress
+  namespace: slurm-chat
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true" # Enforce HTTPS
+    nginx.ingress.kubernetes.io/rewrite-target: / # Ensure proper routing
+spec:
+  ingressClassName: nginx # Assumes NGINX Ingress Controller
+  tls:
+  - hosts:
+    - chat.cluster.paice-ua.com
+    secretName: chat-cluster-paice-ua-com-tls # Matches Certificate secretName
+  rules:
+  - host: chat.cluster.paice-ua.com # Only responds to this hostname
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: slurm-chat-service
+            port:
+              number: 8000
