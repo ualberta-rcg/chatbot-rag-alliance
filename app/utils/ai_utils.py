@@ -154,23 +154,7 @@ def get_llm( callback_manager=None, streaming=False, max_tokens=1024, ai_provide
 def generate_rag_search_query(user_message, user_message_2, ai_response):
     current_app.logger.debug("Starting generate_rag_search_query")
 
-    system_message = """Your task: Generate a concise keyword-style search query from the conversation.
-
-You are a helpful assistant trained on the Digital Research Alliance of Canada documentation, including topics like:
-HPC clusters (e.g. Vulcan), Slurm, CCDB, job scheduling, account creation, portals, Open OnDemand, and general support topics.
-
-Rules:
-1. Extract names of people, tools, services, places, companies, and key technical or procedural terms.
-2. Return only the search query — avoid quotes, punctuation, explanations, or formatting.
-3. Focus on meaningful terms from the Alliance ecosystem: e.g., CCDB, Vulcan, Alliance, Trailblazing Turtle, account, job, Slurm, modules, etc.
-4. Be multilingual-friendly, with a preference for English terms if ambiguous.
-5. Prefer clarity and breadth over brevity — up to 15 words is fine.
-6. If nothing is specific, fall back on general HPC and Alliance keywords.
-7. No matter what language you receive, the output must be in english.
-8. Be more wordy when generating keywords, if you assume it's a cluster, add terms like 'HPC', 'Cluster', 'Slurm'.
-
-Your output should be a search query and potentially relevent keywords that will be used to seacrh the RAG database.
-"""
+    system_message = ProfileData.RAG_SEARCH_QUERY_SYSTEM_PROMPT
 
     try:
         llm = get_llm(max_tokens=45, ai_provider=current_app.config['AI_PROVIDER'], ai_model=current_app.config['AI_MODEL_B'])
@@ -212,7 +196,7 @@ def generate_message_summary(rest_of_messages):
     current_app.logger.debug(f"Starting generate_message_summary")
 
     # System message to provide context to the LLM for summarization
-    system_message = "Summarize the following conversation. The goal is to create a concise and descriptive summary of the conversation, capturing the key points and topics discussed. Focus on providing an overview of the important details."
+    system_message = ProfileData.MESSAGE_SUMMARY_SYSTEM_PROMPT
 
     try:
         # Select the correct model based on the primary AI provider
@@ -297,13 +281,15 @@ def generate_prompt(summary, recent_messages, rag_results, current_messages, use
         """
     
     prompt += """
-    \nDirect Contact Policy:  
-    - If you're asked something that feels critical but isn't in the available information, you are **allowed and encouraged to share direct contact information for {ProfileData.FIRST_NAME}.**  
-    - NEVER suggest that you can communicate with {ProfileData.FIRST_NAME} on the user's behalf.  """
+    \nDirect Contact Policy:
+    - If a user asks something important that you cannot answer from the available documentation or RAG results, you should encourage them to contact the official support team at the Digital Research Alliance of Canada.
+    - You may say: “It looks like this isn’t covered in the current documentation. I recommend reaching out to support@tech.alliancecan.ca for personalized assistance.”
+    - You need to be mindfull to give only support that works on Allaince HPC Clusters. Much of the build in training is not quite right for us. 
+    - NEVER suggest that you can file tickets, send emails, or contact humans on the user's behalf.
+    - Remain professional and helpful when encouraging users to contact support directly.
+    """
 
-
-    current_app.logger.debug(f"Generated CV prompt: {prompt}")
-    print(f"Generated CV prompt: {prompt}")
+    current_app.logger.debug(f"Generated prompt: {prompt}")
     return prompt
 
 
