@@ -33,12 +33,12 @@ Update the contents list to reflect chatbot components:
 
 This container includes:
 
-* Flask + Flask-SocketIO web server
-* LangChain with support for OpenAI, Groq, Claude, and Ollama providers
-* Vector search integration with RAGFlow or Weaviate
-* Prebuilt routes for user input, chat state, and WebSocket sessions
-* Markdown rendering, streaming responses, and token budgeting
-* Prompt templating system and persona switching via external text files
+* Flask + Flask-SocketIO web server with CSRF and session management
+* LangChain integration with support for OpenAI, Groq, Anthropic, Ollama, and Google AI
+* Vector search via RAGFlow (and optionally Ragie)
+* Real-time chat interface using Markdown rendering and WebSocket streaming
+* Prompt templating system with RAG integration and persona switching
+* Future-ready route design for Slack bots, Google Chat bots, and others
 
 ## 🛠️ GitHub Actions - CI/CD Pipeline
 
