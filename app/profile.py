@@ -4,6 +4,7 @@ class ProfileData:
     
     FIRST_NAME = os.getenv('PROFILE_FIRST_NAME', "Helpy")
     LAST_NAME = os.getenv('PROFILE_LAST_NAME', "Concierge")
+    CHATBOT_DESCRIPTION = ""
     IMAGE_FILE = os.path.join("images", os.getenv('PROFILE_IMAGE_FILE', "drac.png"))
     PROMPT1 = os.getenv('PROFILE_PROMPT_1', "How can I get started with Alliance HPC resources?")
     PROMPT2 = os.getenv('PROFILE_PROMPT_2', "What are the steps to request an Alliance account?")
