@@ -1,27 +1,4 @@
 ---
-# Namespace for Slurm Chat
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: slurm-chat
-
----
-# Secret to store sensitive API keys
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-secrets
-  namespace: slurm-chat
-type: Opaque
-data:
-  # Replace these with your actual Base64-encoded values
-  GOOGLE_AI_API_KEY: <base64-encoded-google-ai-api-key>
-  ANTHROPIC_API_KEY: <base64-encoded-anthropic-api-key>
-  GROQ_API_KEY: <base64-encoded-groq-api-key>
-  OPENAI_API_KEY: <base64-encoded-openai-api-key>
-  RAGIE_API_KEY: <base64-encoded-ragie-api-key>
-
----
 # Deployment for the Slurm Chat application
 apiVersion: apps/v1
 kind: Deployment
@@ -42,15 +19,19 @@ spec:
     spec:
       containers:
       - name: slurm-chat
-        image: rkhoja/slurm-chat:latest
+        image: rkhoja/alliance-chat:latest
         imagePullPolicy: Always
         env:
           - name: AI_PROVIDER
-            value: "ANTHROPIC" # Replace with your value
+            value: "OLLAMA" # Replace with your value
           - name: AI_MODEL_A
-            value: "claude-3-5-sonnet-20241022" # Replace with your value
+            value: "deepseek-r1:671b" # Replace with your value
           - name: AI_MODEL_B
-            value: "claude-3-5-haiku-20241022" # Replace with your value
+            value: "command-r-plus:latest" # Replace with your value
+          - name: SECRET_KEY
+            value: "123456586789698798798"
+          - name: RAGFLOW_API_URL
+            value: "https://1.2.3.4"
           - name: GOOGLE_AI_API_KEY
             valueFrom:
               secretKeyRef:
@@ -76,22 +57,13 @@ spec:
               secretKeyRef:
                 name: app-secrets
                 key: RAGIE_API_KEY
+          - name: RAGFLOW_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: RAGFLOW_API_KEY
         ports:
         - containerPort: 8000
-        readinessProbe:
-          tcpSocket:
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 15
-          timeoutSeconds: 2
-        livenessProbe:
-          tcpSocket:
-            port: 8000
-          initialDelaySeconds: 15
-          periodSeconds: 15
-          timeoutSeconds: 2
-          failureThreshold: 3
-        terminationGracePeriodSeconds: 5
 
 ---
 # Service to expose the application internally
@@ -134,10 +106,9 @@ metadata:
   name: slurm-chat-ingress
   namespace: slurm-chat
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true" # Enforce HTTPS
-    nginx.ingress.kubernetes.io/rewrite-target: / # Ensure proper routing
+    traefik.ingress.kubernetes.io/router.tls: "true" # Explicitly enable TLS
 spec:
-  ingressClassName: nginx # Assumes NGINX Ingress Controller
+  ingressClassName: traefik
   tls:
   - hosts:
     - chat.cluster.paice-ua.com
