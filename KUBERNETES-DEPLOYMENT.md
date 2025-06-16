@@ -46,9 +46,9 @@ metadata:
   namespace: chatbot-rag-alliance
 type: Opaque
 stringData:
-  SECRET_KEY: "your-secret-key"
-  GOOGLE_AI_API_KEY: "your-google-api-key"
-  ANTHROPIC_API_KEY: "your-anthropic-api-key"
+  SECRET_KEY: "your-secret-key"              
+  GOOGLE_AI_API_KEY: "your-google-api-key"          
+  ANTHROPIC_API_KEY: "your-anthropic-api-key"       
   GROQ_API_KEY: "your-groq-api-key"
   OPENAI_API_KEY: "your-openai-api-key"
   RAGIE_API_KEY: "your-ragie-api-key"
@@ -86,13 +86,13 @@ spec:
         imagePullPolicy: Always
         env:
           - name: AI_PROVIDER
-            value: "OLLAMA" # [OLLAMA, OPENAI, GROQCLOUD, ANTHROPIC, GOOGLE]
+            value: "OPENAI" # [OLLAMA, OPENAI, GROQCLOUD, ANTHROPIC, GOOGLE]
           - name: AI_MODEL_A
-            value: "deepseek-r1:671b"
+            value: "gpt-4.1"
           - name: AI_MODEL_B
-            value: "command-r-plus:latest"
+            value: "o4-mini" # This is used to summerize, and to generate RAG search queries
           - name: RAGFLOW_API_URL
-            value: "https://your-ragflow-endpoint"
+            value: "https://your-ragflow-endpoint"  # Not required
           - name: SECRET_KEY
             valueFrom:
               secretKeyRef:
