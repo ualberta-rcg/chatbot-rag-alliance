@@ -3,7 +3,7 @@ import os
 class ProfileData:
 
     try:
-        with open("user_bio.txt", "r") as f:
+        with open("prompts/user_bio.txt", "r") as f:
             USER_BIO = f.read()
     except FileNotFoundError:
         print("Error: user_bio.txt not found. Exiting.")
