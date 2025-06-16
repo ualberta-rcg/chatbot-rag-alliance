@@ -1,8 +1,14 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chatbot-rag-alliance
+---
 apiVersion: v1
 kind: Secret
 metadata:
   name: app-secrets
-  namespace: slurm-chat
+  namespace: chatbot-rag-alliance
 type: Opaque
 stringData:
   SECRET_KEY: "dummy-secret-key-123456"
@@ -17,27 +23,27 @@ stringData:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: slurm-chat-deployment
-  namespace: slurm-chat
+  name: chatbot-rag-alliance-deployment
+  namespace: chatbot-rag-alliance
   labels:
-    app: slurm-chat
+    app: chatbot-rag-alliance
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: slurm-chat
+      app: chatbot-rag-alliance
   template:
     metadata:
       labels:
-        app: slurm-chat
+        app: chatbot-rag-alliance
     spec:
       containers:
-      - name: slurm-chat
+      - name: chatbot-rag-alliance
         image: rkhoja/alliance-chat:latest
         imagePullPolicy: Always
         env:
           - name: AI_PROVIDER
-            value: "OLLAMA" # Replace with your value
+            value: "OLLAMA" # Replace with your value [OPENAI,G]
           - name: AI_MODEL_A
             value: "deepseek-r1:671b" # Replace with your value
           - name: AI_MODEL_B
@@ -86,11 +92,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: slurm-chat-service
-  namespace: slurm-chat
+  name: chatbot-rag-alliance-service
+  namespace: chatbot-rag-alliance
 spec:
   selector:
-    app: slurm-chat
+    app: chatbot-rag-alliance
   ports:
   - port: 8000
     targetPort: 8000
@@ -103,7 +109,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: chat-cluster-paice-ua-com
-  namespace: slurm-chat
+  namespace: chatbot-rag-alliance
 spec:
   secretName: chat-cluster-paice-ua-com-tls
   issuerRef:
@@ -117,8 +123,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: slurm-chat-ingress
-  namespace: slurm-chat
+  name: chatbot-rag-alliance-ingress
+  namespace: chatbot-rag-alliance
   annotations:
     traefik.ingress.kubernetes.io/router.tls: "true" # Explicitly enable TLS
 spec:
@@ -135,6 +141,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: slurm-chat-service
+            name: chatbot-rag-alliance-service
             port:
               number: 8000
