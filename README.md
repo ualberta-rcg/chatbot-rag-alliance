@@ -11,11 +11,13 @@
 
 ## 🧰 Description
 
-This repository contains the source code and deployment configuration for **Helpy** — a containerized, Retrieval-Augmented Generation (RAG) powered chatbot that provides conversational assistance for HPC users across the Digital Research Alliance of Canada infrastructure.
+This repository contains the source code and Kubernetes deployment for Helpy — a containerized, Retrieval-Augmented Generation (RAG) chatbot built to support users on Digital Research Alliance of Canada HPC clusters.
 
-Helpy is designed to help researchers with cluster usage, Slurm job issues, software environments, and Alliance documentation. It uses a vector database and large language models (LLMs) to answer user questions in real-time.
+Helpy answers user questions about Slurm job scheduling, software environments, module usage, and Alliance-specific documentation. It supports multiple large language model (LLM) providers including OpenAI, Anthropic, GroqCloud, Google AI, and Ollama, and retrieves knowledge from vector databases like RAGFlow and (soon) Google Agent.
 
-It is deployed as a Kubernetes-native application, with optional WebSocket support, GitHub Actions CI/CD, and integration with RAGFlow or other vector search providers.
+The backend is Flask-based with optional WebSocket streaming and supports integration with Slack, Google Chat, and other future UIs through modular route extensions.
+
+**Note:** *This project was initially developed and donated to the University of Alberta by Rahim Khoja.*
 
 The image is automatically built and pushed to Docker Hub using GitHub Actions whenever changes are pushed to the `latest` branch.
 
