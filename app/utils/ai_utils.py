@@ -66,15 +66,11 @@ def process_message(message, messages, socketio, callback_manager):
         current_app.logger.error(f"Error Getting rag_results: {str(e)}", exc_info=True)
         rag_results = None
 
-    current_app.logger.info(f'RAG Search Results: {str(rag_results)}')
-    current_app.logger.debug(f'RAG Search Results: {str(rag_results)}')
-
-    print(f'RAG Search Results: {str(rag_results)}')
-    print(f'RAG Search Results: {str(rag_results)}')
-    
+    current_app.logger.error(f'RAG Search Results: {str(rag_results)}')
+  
     llm_prompt = generate_prompt(summary, recent_messages, rag_results, current_messages, message) 
 
-    current_app.logger.error(f'llm_prompt: {llm_prompt}')
+    current_app.logger.error(f'Prompt: {llm_prompt}')
 
     # Invoke the LLM
     #if current_app.config['AI_PROVIDER'] == "GOOGLE":
