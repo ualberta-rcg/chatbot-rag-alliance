@@ -40,6 +40,29 @@ This container includes:
 * Prompt templating system with RAG integration and persona switching
 * Future-ready route design for Slack bots, Google Chat bots, and others
 
+## 📦 Requirements
+
+To run Helpy, the following services or APIs must be available:
+
+* At least one LLM provider:
+  * OpenAI (ChatGPT)
+  * GroqCloud
+  * Anthropic
+  * Google AI Studio
+  * Ollama (self-hosted)
+* A RAG source (vector database), such as:
+  * RAGFlow (recommended)
+  * Ragie (optional, alternative)
+* Kubernetes cluster (any distribution) with:
+  * Ingress controller (e.g. Traefik or NGINX)
+  * cert-manager (for TLS certificates)
+  * Secrets and ConfigMap support
+* Docker registry (e.g. Docker Hub) for image hosting
+* Optional: Slack or Google Chat for external UI integrations (coming soon)
+
+> ℹ️ Your AI provider must be set up with an API key and accessible endpoint. Some providers (like Ollama) may require a self-hosted container.
+
+
 ## 🛠️ GitHub Actions - CI/CD Pipeline
 
 This project includes a GitHub Actions workflow: `.github/workflows/build-chatbot-rag-alliance.yml`.
@@ -75,29 +98,6 @@ git checkout latest
 git merge main
 git push origin latest
 ```
-
-## 📦 Requirements
-
-To run Helpy, the following services or APIs must be available:
-
-* At least one LLM provider:
-  * OpenAI (ChatGPT)
-  * GroqCloud
-  * Anthropic
-  * Google AI Studio
-  * Ollama (self-hosted)
-* A RAG source (vector database), such as:
-  * RAGFlow (recommended)
-  * Ragie (optional, alternative)
-* Kubernetes cluster (any distribution) with:
-  * Ingress controller (e.g. Traefik or NGINX)
-  * cert-manager (for TLS certificates)
-  * Secrets and ConfigMap support
-* Docker registry (e.g. Docker Hub) for image hosting
-* Optional: Slack or Google Chat for external UI integrations (coming soon)
-
-> ℹ️ Your AI provider must be set up with an API key and accessible endpoint. Some providers (like Ollama) may require a self-hosted container.
-
 
 ## 🤝 Support
 
