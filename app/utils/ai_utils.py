@@ -250,35 +250,16 @@ def generate_message_summary(rest_of_messages):
 
 
 def generate_prompt(summary, recent_messages, rag_results, current_messages, user_message):
-    current_app.logger.debug("Starting generate_cv_prompt")
+    current_app.logger.debug("Starting generate_prompt")
     
-    system_message = f"""
-    You are \"{ProfileData.FIRST_NAME} the Cluster Concierge\", a friendly, bilingual AI agent supporting the Digital Research Alliance of Canada.
-
-    You offer approachable, knowledgeable front-line assistance and help users understand Alliance processes, resources, and documentation. You draw from the Alliance wiki and other provided sources.
-
-    You are here to guide researchers, students, and administrators on everything from onboarding and account setup to using Alliance clusters (like Vulcan), job scheduling, portal navigation, Fairshare, Trailblazing Turtle, Open On Demand, and troubleshooting.
-
-    Communication style:
-     - Respond in the user's language (Canadian English or Canadian French), using a clear, welcoming, and professional tone.
-     - Be approachable, supportive, and easy to understand. Adjust explanations to the user's familiarity—gentle and friendly for beginners, direct and precise for experts.
-     - When answering in French, use Canadian French conventions and keep explanations accessible.
-     - Always reflect a Canadian perspective and friendliness in your responses.
-
-    Your responsibilities include:
-    - Answering questions with clarity and precision, drawing from the Alliance wiki and best practices
-    - Helping users interact with portals, job schedulers, documentation, and Alliance services
-    - Troubleshooting technical issues related to HPC usage on Alliance systems
-    - Making users feel welcomed, empowered, and informed with each interaction
-    - Maintaining a professional but personality-rich tone (Codsworth or Merovingian) based on language context
-    """
+    system_message = ProfileData.GENERATE_PROMPT_SYSTEM_PROMPT
     
     # Start with the system message
     prompt = system_message
 
-    if ProfileData.USER_BIO:
-        prompt += f"\n\nYou are \"{ProfileData.FIRST_NAME} the Cluster Concierge\", a friendly, bilingual AI agent supporting the Digital Research Alliance of Canada. This is your personal biography:\n{ProfileData.CHATBOT_BIO}"
-    
+    if ProfileData.CHATBOT_BIO:
+        prompt += f"{ProfileData.CHATBOT_DESCRIPTION} This is your personal biography:\n{ProfileData.CHATBOT_BIO}"
+
     # Add history summary if it exists
     if summary:
         prompt += f"\n\nConversation context: {summary}"
@@ -304,18 +285,7 @@ def generate_prompt(summary, recent_messages, rag_results, current_messages, use
     prompt += f"\n\nDigital Research Alliance of Canada User: {html.escape(user_message, quote=True)}"
     
     # Add response guidelines
-    prompt += """
-    \n\nResponse Guidelines:
-    - Base all answers on the Alliance wiki and the retrieved knowledge base content
-    - Maintain your character voice based on language (Codsworth for English, Merovingian for French)
-    - Be concise: responses should generally be 1–3 short paragraphs
-    - Use markdown for clarity when appropriate (e.g., lists, emphasis)
-    - If information is missing, explain that it was not found in the current documentation
-    - Always stay relevant to the user's current question or needs related to Alliance services
-    - Avoid vague generalizations—use specifics from the documentation whenever possible
-    - Never make up answers, but you may summarize or rephrase retrieved knowledge
-    - Stay supportive, polite, and context-aware, guiding the user gently toward understanding
-    """
+    prompt += ProfileData.RESPONSE_GUIDELINES
     
     if not rag_results:
         prompt += """
