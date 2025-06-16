@@ -29,7 +29,6 @@ docker pull rkhoja/chatbot-rag-alliance:latest
 
 Update the contents list to reflect chatbot components:
 
-```markdown
 This container includes:
 
 * Flask + Flask-SocketIO web server
