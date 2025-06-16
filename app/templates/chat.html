@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="webmaster" content="{{ seometa.WEBMASTER }}">	  
+        <meta name="robots" content="index, follow">
+        <meta property="og:title" content="{{ profileData.FIRST_NAME }} the Alliance Cluster Concierge">
+        <meta property="og:description" content="{{ seometa.DESCRIPTION }}">
+        <meta property="og:image" content="{{ url_for('static', filename=profileData.IMAGE_FILE) }}">
+        <meta property="og:url" content="{{ request.url_root[:-1] }}">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ profileData.FIRST_NAME }} the Alliance Cluster Concierge">
+        <meta name="twitter:description" content="{{ seometa.DESCRIPTION }}">
+        <meta name="twitter:image" content="{{ url_for('static', filename=profileData.IMAGE_FILE) }}">
+        <link rel="canonical" href="{{ request.url_root[:-1] }}">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>{{ profileData.FIRST_NAME }} the Alliance Cluster Concierge</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicons/favicon_16x16.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicons/favicon_32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="48x48" href="{{ url_for('static', filename='favicons/favicon_48x48.png') }}">
+        <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='favicons/favicon_64x64.png') }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favicons/favicon_96x96.png') }}">
+        <link rel="icon" type="image/png" sizes="128x128" href="{{ url_for('static', filename='favicons/favicon_128x128.png') }}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicons/favicon_192x192.png') }}">
+        <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='favicons/favicon_256x256.png') }}">
+        <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='favicons/favicon_512x512.png') }}">
+        <!-- Apple Touch Icons -->
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='favicons/favicon_120x120.png') }}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='favicons/favicon_152x152.png') }}">
+        <link rel="apple-touch-icon" sizes="167x167" href="{{ url_for('static', filename='favicons/favicon_167x167.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicons/favicon_180x180.png') }}">
+        <!-- Windows Tiles -->
+        <meta name="msapplication-square70x70logo" content="{{ url_for('static', filename='favicons/favicon_70x70.png') }}">
+        <meta name="msapplication-square150x150logo" content="{{ url_for('static', filename='favicons/favicon_150x150.png') }}">
+        <meta name="msapplication-square310x310logo" content="{{ url_for('static', filename='favicons/favicon_310x310.png') }}">
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "{{ profileData.FIRST_NAME }} the Alliance Cluster Concierge",
+          "url": "{{ request.url_root[:-1] }}",
+          "sameAs": [
+            {% if seometa.LINKEDIN %}"{{ seometa.LINKEDIN }}"{% endif %}{% if seometa.LINKEDIN and (seometa.TWITTER or seometa.FACEBOOK) %},{% endif %}
+            {% if seometa.TWITTER %}"{{ seometa.TWITTER }}"{% endif %}{% if seometa.TWITTER and seometa.FACEBOOK %},{% endif %}
+            {% if seometa.FACEBOOK %}"{{ seometa.FACEBOOK }}"{% endif %}
+          ]
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "{{ seometa.ORG_NAME }}",
+          "url": "{{ seometa.ORG_URL }}",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "{{ seometa.ORG_EMAIL }}",
+            "contactType": "customer service"
+          }
+        }
+        </script>	
+        <link href="{{ url_for('static', filename='fonts/montserrat/montserrat.css') }}" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css">
+        <style>
+
+/* Replace your existing markdown code styles with these */
+.markdown code {
+    background-color: #f8f8f8;
+    color: #e83e8c;
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.875em;
+    border: 1px solid #e1e5e9;
+}
+
+.markdown pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.875rem;
+    white-space: pre;
+}
+
+/* Code block container styling */
+.code-toolbar {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.code-toolbar .toolbar {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.code-toolbar:hover .toolbar {
+    opacity: 1;
+}
+
+.code-toolbar .toolbar .toolbar-item button {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.code-toolbar .toolbar .toolbar-item button:hover {
+    background: #5a6268;
+}
+
+/* Copy success feedback */
+.copy-success {
+    background: #28a745 !important;
+}		
+            body {
+                font-family: 'Montserrat', sans-serif;
+            }
+
+            .markdown a {
+                text-decoration: underline;
+            }
+
+            .markdown a:hover {
+                text-decoration: underline;
+            }
+
+
+            /* Inline code only — doesn't affect pre > code blocks */
+            .markdown p code {
+                background-color: #e5e7eb; /* Tailwind's gray-200 */
+                padding: 0.2rem 0.4rem;
+                border-radius: 0.25rem;
+            }
+		
+            .typing-indicator {
+                display: inline-block;
+                position: relative;
+                width: 40px;
+                height: 24px;
+            }
+
+            .typing-indicator span {
+                display: inline-block;
+                position: absolute;
+                background: #333; /* Change color as needed */
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                animation: typingIndicator 1s infinite;
+            }
+
+            .typing-indicator span:nth-child(1) { left: 0; animation-delay: 0s; }
+            .typing-indicator span:nth-child(2) { left: 12px; animation-delay: 0.2s; }
+            .typing-indicator span:nth-child(3) { left: 24px; animation-delay: 0.4s; }
+            @keyframes typingIndicator {
+                0% { opacity: 0.2; }
+                20% { opacity: 1; }
+                100% { opacity: 0.2; }
+            }
+
+            .ai-response-text {
+                font-family: 'Montserrat', sans-serif; /* Use Montserrat with fallback to sans-serif */
+            }
+		
+            /* Disabled Send Button */
+            .send-button.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            /* Disabled Input Field */
+            #message-input:disabled {
+                background-color: #e5e7eb; /* Tailwind's gray-200 */
+                cursor: not-allowed;
+            }
+    	</style>
+    </head>
+    <body class="bg-gray-100 box-border">
+        <!-- Main Content -->
+        <div class="flex flex-col h-screen pt-8 lg:pt-10">
+            <!-- Header -->
+            <div class="fixed top-0 left-0 w-full z-50 bg-white px-6 py-1 lg:py-2 flex flex-col lg:flex-row lg:items-center justify-between border-0">
+                <div class="flex items-center gap-8">
+                    <a href="{{ url_for('new') }}">
+                        <button class="text-gray-500 hover:text-black relative top-1">
+                            <!-- SVG icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24">
+                                <mask id="edit_square_svg__a" width="24" height="24" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+                                    <path fill="currentColor" d="M0 0h24v24H0z"></path>
+                                </mask>
+                                <g mask="url(#edit_square_svg__a)">
+                                    <path fill="currentColor" d="M5.308 20.499q-.758 0-1.283-.525a1.75 1.75 0 0 1-.525-1.283V5.307q0-.758.525-1.283t1.283-.525h8.656l-1.5 1.5H5.308a.3.3 0 0 0-.212.096.3.3 0 0 0-.096.212V18.69q0 .116.096.212a.3.3 0 0 0 .212.096h13.384a.3.3 0 0 0 .212-.096.3.3 0 0 0 .096-.212v-7.219l1.5-1.5v8.72q0 .757-.525 1.282t-1.283.525zm4.192-6v-3.433l9.06-9.06q.232-.232.511-.339.279-.106.567-.106.295 0 .566.106.27.107.494.33l1.256 1.252q.217.232.334.514.116.28.116.569t-.1.56q-.098.27-.331.503L12.885 14.5zm1.5-1.5h1.246l6.233-6.233-.623-.623-.668-.642L11 11.69z"></path>
+                                </g>
+                            </svg>
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <!-- Chat Content -->
+            <div class="chat-content flex-1 overflow-y-auto bg-white ">
+                <!-- Messages Container -->
+                <div id="message-container" class="max-w-screen-md mx-auto space-y-4 min-h-full pt-2 pb-40 lg:pb-24">
+		    {% if messages|length == 0 %}<div class="message flex justify-end">
+                        <div class="max-w-[70%] bg-gray-100 px-5 py-4 rounded-xl text-base bg-[#F5F5F5]">
+                            {{ message_content }}
+                        </div>
+                    </div>{% endif %}
+                    {% for message in messages %}
+                    {% if message.sender == 'user' %}
+                    <!-- User Message -->
+                    <div class="message flex justify-end">
+                        <div class="max-w-[70%] bg-gray-100 px-5 py-4 rounded-xl text-base bg-[#F5F5F5]">
+                            {{ message.content }}
+                        </div>
+                    </div>
+                    {% elif message.sender == 'ai' %}
+                    <!-- Previous AI Messages -->
+                    <div class="hero-section message ai-message flex flex-row justify-left items-center p-4" style="align-items: flex-start;">
+                        <!-- Profile Image -->
+                        <div class="profile-image relative rounded-full w-[70px] h-[70px] overflow-hidden">
+                            <img id="hero-avatar" alt="{{ profileData.FIRST_NAME }} {{ profileData.LAST_NAME }} Profile Image" loading="lazy" decoding="async" class="rounded-full" style="width: 70px; height: 70px; object-fit: cover;" src="{{ url_for('static', filename=profileData.IMAGE_FILE) }}">
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <div class="px-5 py-4 rounded-xl text-base">
+                                <div class="markdown static-markdown mb-3">
+				    <pre class="ai-response-text whitespace-pre-wrap">{{ message.content | safe }}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Input Box -->
+            <div class="fixed bottom-0 left-0 w-full flex flex-col">
+                <form id="message-form" class="w-full">
+                    <div class="w-full p-4 pb-4 bg-white overflow-hidden">
+                        <div class="max-w-screen-md mx-auto">
+                            <div class="max-w-screen-md bg-gray-100 mx-auto rounded-2xl flex items-center px-2 bg-[#F3F3F3] rounded-[24px] flex items-center px-2">
+                                <!-- Main Textarea for User Input -->
+                                <textarea
+                                    id="message-input"
+                                    name="message"
+                                    rows="1"
+                                    autofocus
+                                    placeholder="Ask {{ profileData.FIRST_NAME }}"
+                                    class="flex-1 text-base px-6 py-4 h-full bg-transparent border-none outline-none resize-none"
+                                    style="height: 49px; overflow: hidden;"
+                                    ></textarea>
+                                <!-- Hidden Textarea (for auto-resizing, if applicable) -->
+                                <textarea
+                                    aria-hidden="true"
+                                    class="flex-1 text-base px-6 py-4 h-full bg-transparent border-none outline-none resize-none"
+                                    readonly
+                                    tabindex="-1"
+                                    style="visibility: hidden; position: absolute; overflow: hidden; height: 0px; top: 0px; left: 0px; transform: translateZ(0px); padding-top: 0px; padding-bottom: 0px; width: 718px;"
+                                    ></textarea>
+                                <!-- Send Button -->
+                                <button type="submit" class="send-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none">
+                                        <path
+                                            fill="currentColor"
+                                            d="M17.231 24.477h1.576V14.339l4.432 4.43 1.061-1.061-6.262-6.223-6.3 6.223 1.062 1.061 4.431-4.43zM18.006 36q-3.72 0-6.989-1.417a18.3 18.3 0 0 1-5.724-3.871 18.3 18.3 0 0 1-3.875-5.718Q0 21.729 0 18.006q0-3.733 1.417-7.02t3.871-5.718a18.5 18.5 0 0 1 5.719-3.85Q14.27 0 17.994 0q3.734 0 7.02 1.417 3.287 1.418 5.718 3.846 2.431 2.43 3.85 5.713Q36 14.259 36 17.994q0 3.72-1.417 6.989a18.6 18.6 0 0 1-3.846 5.724q-2.43 2.458-5.713 3.874Q21.741 36 18.006 36"
+                                            ></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Footer -->
+                <div class="bg-black text-gray-300 h-[65px] min-h-[20px] flex justify-between items-center px-6 mt-auto" style="min-height: 20px; flex-shrink: 0;">
+                    <!-- Left side content -->
+                    <a href="https://github.com/infiniflow/ragflow" class="flex gap-3 items-center">
+                        <img src="{{ url_for('static', filename='images/logo/ragflow_logo_col.png') }}" alt="Ragflow Logo" style="max-height: 18px;" />
+                        <span class="hidden sm:inline">RAG by Ragflow.io</span>
+                    </a>
+                    <!-- Right side content -->{% if aiProvider == 'GROQCLOUD' %}
+                    <a href="https://console.groq.com/playground" class="flex gap-3 items-center">
+                        <span class="hidden sm:inline">AI by Groq</span>
+                        <img src="{{ url_for('static', filename='images/logo/groq.webp') }}" alt="Groq Cloud" style="max-height: 15px;">
+                    </a>{% elif aiProvider == 'OPENAI' %}
+                    <a href="https://platform.openai.com/" class="flex gap-3 items-center">
+                        <span class="hidden sm:inline">AI by OpenAI</span>
+                        <img src="{{ url_for('static', filename='images/logo/openai.webp') }}" alt="OpenAI" style="max-height: 18px;">
+                    </a>{% elif aiProvider == 'ANTHROPIC' %}
+                    <a href="https://www.anthropic.com/" class="flex gap-3 items-center">
+                        <span class="hidden sm:inline">AI by Anthropic</span>
+                        <img src="{{ url_for('static', filename='images/logo/anthropic.webp') }}" alt="Anthropic" style="max-height: 15px;">
+                    </a>{% elif aiProvider == 'GOOGLE' %}
+                    <a href="https://ai.google.com/" class="flex gap-3 items-center">
+                        <span class="hidden sm:inline">AI by Google</span>
+                        <img src="{{ url_for('static', filename='images/logo/google_ai.webp') }}" alt="Google AI" style="max-height: 20px;">
+                    </a>{% endif %}
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+        <script>
+        
+            if (window.performance.getEntriesByType('navigation')[0].type === 'reload') {
+                window.history.pushState({}, '', window.location.pathname);
+            }
+            
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const message_content = {% if message_content %}{{ message_content | tojson }}{% else %}null{% endif %};
+            const hasMessageBeenSent = localStorage.getItem('messageSent') === 'true';
+        	
+            const socket = io({
+                auth: {
+                    csrf_token: csrfToken
+                }
+            });
+        
+            let markdownContent = ""; // Holds accumulated markdown text
+        
+            const messageForm = document.getElementById('message-form');
+            const messageInput = document.getElementById('message-input');
+            const messageContainer = document.getElementById('message-container');
+            
+            let currentAIMessageContainer = null;
+            let currentTextNode = null;
+            let typingIndicatorContainer = null; // Add a reference for the typing indicator
+        
+            let inactivityTimeout;
+            const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes in milliseconds
+        
+            function connectSocket() {
+                if (!socket.connected) {
+                    socket.connect();
+                }
+            }
+        
+            function resetInactivityTimer() {
+                clearTimeout(inactivityTimeout);
+                inactivityTimeout = setTimeout(() => {
+                    console.log('Disconnecting socket due to inactivity');
+                    socket.disconnect();
+                }, INACTIVITY_TIMEOUT);
+            }
+        
+            socket.on('connect', () => {
+                console.log('Connected to socket.io server');
+                resetInactivityTimer();
+                {% if messages|length == 0 %}
+                socket.emit('init_conversation');
+                {% endif %}
+            });
+        
+            socket.on('chat_response', (data) => {
+                addChunkToAIMessage(data.response_chunk);
+            });
+        
+            socket.on('chat_response_end', () => {
+                finalizeAIMessage();
+                scrollToBottom();
+            });
+        
+            socket.on('error', (data) => {
+                console.error('Error:', data.message);
+            });
+        
+            socket.onAny((event, ...args) => {
+                console.log("[Socket Event]", event, args);
+                resetInactivityTimer();
+            });
+        	
+            socket.on('init_conversation_response', (data) => {
+                if (data && data.init === true) { 
+                    scrollToBottom();
+                    createAIMessageContainer();
+                } else {
+                    console.warn('Unexpected data.init value:', data.init);
+                }
+            });
+        
+            function addMessageToChat(sender, content) {
+                if (sender === 'user') {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message flex justify-end';
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'max-w-[70%] bg-gray-100 px-5 py-4 rounded-xl text-base bg-[#F5F5F5]';
+                    contentDiv.textContent = content;
+                    messageDiv.appendChild(contentDiv);
+                    messageContainer.appendChild(messageDiv);
+                }
+            }
+        	
+            function createAIMessageContainer() {
+                const heroSectionDiv = document.createElement('div');
+                heroSectionDiv.className = 'hero-section message ai-message flex flex-row justify-left items-center p-4';
+                heroSectionDiv.style.alignItems = 'flex-start';
+            
+                const profileImageDiv = document.createElement('div');
+                profileImageDiv.className = 'profile-image relative rounded-full w-[70px] h-[70px] overflow-hidden';
+                const img = document.createElement('img');
+                img.alt = '{{ profileData.FIRST_NAME }} {{ profileData.LAST_NAME }} Profile Image';
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                img.className = 'rounded-full';
+                img.style.width = '70px';
+                img.style.height = '70px';
+                img.style.objectFit = 'cover';
+                img.src = '{{ url_for("static", filename=profileData.IMAGE_FILE) }}';
+                profileImageDiv.appendChild(img);
+            
+                const flexDiv = document.createElement('div');
+                flexDiv.className = 'flex-1 overflow-hidden';
+            
+                const innerDiv = document.createElement('div');
+                innerDiv.className = 'px-5 py-4 rounded-xl text-base';
+            
+                const markdownDiv = document.createElement('div');
+                markdownDiv.className = 'markdown mb-3';
+            
+                const typedContainer = document.createElement('div');
+                typedContainer.className = 'ai-response-chunk-container';
+            
+                // Add the typing indicator to the container
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
+                typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+                markdownDiv.appendChild(typingIndicator);
+                typingIndicatorContainer = typingIndicator; // Save reference to the typing indicator
+            
+                // Create and store the text node
+                const textContainer = document.createElement('div');
+                textContainer.className = 'ai-response-text whitespace-pre-wrap';
+                currentTextNode = document.createTextNode('');
+                textContainer.appendChild(currentTextNode);
+                markdownDiv.appendChild(textContainer);
+            
+                // Append the containers
+                innerDiv.appendChild(markdownDiv);
+                flexDiv.appendChild(innerDiv);
+                heroSectionDiv.appendChild(profileImageDiv);
+                heroSectionDiv.appendChild(flexDiv);
+            
+                messageContainer.appendChild(heroSectionDiv);
+                currentAIMessageContainer = textContainer;
+            
+                scrollToBottom();
+            }
+            
+            function addChunkToAIMessage(chunk) {
+                if (!currentTextNode) return;
+            
+                let sanitizedChunk = typeof chunk === "string" ? chunk : String(chunk);
+                markdownContent += sanitizedChunk;
+    
+                const markedContent = marked.parse(markdownContent)
+                    .replace(/<li>/g, '- ')
+                    .replace(/<\/li>/g, '')
+                    .replace(/<ul>/g, '')
+                    .replace(/<\/ul>/g, '')
+                    .replace(/<p><strong>/g, '<strong>')
+                    .replace(/<\/strong><\/p>/g, '</strong>')
+                    .replace(/<a (?![^>]*target=["']_blank["'])/g, '<a target="_blank" ')
+                    .replace(/<\/?ol>/g, '')
+                    .replace(/<\/?em>/g, '');
+    
+                currentAIMessageContainer.innerHTML = DOMPurify.sanitize(markedContent);
+    
+                Prism.highlightAllUnder(currentAIMessageContainer);
+    
+                scrollToBottom();
+    
+                if (typingIndicatorContainer) {
+                    typingIndicatorContainer.remove();
+                    typingIndicatorContainer = null;
+                }
+            }
+        	
+            function finalizeAIMessage() {
+                // Reset the typing indicator if necessary
+                if (typingIndicatorContainer) {
+                    typingIndicatorContainer.remove();
+                    typingIndicatorContainer = null;
+                }
+        
+                markdownContent = '';
+                currentAIMessageContainer = null;
+                currentTextNode = null;
+            }
+        
+            function scrollToBottom() {
+                const chatContent = document.querySelector('.chat-content');
+                chatContent.scrollTo({
+                    top: chatContent.scrollHeight,
+                    behavior: 'smooth',
+                });
+            }
+        
+            document.getElementById('message-input').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    const userMessage = messageInput.value.trim();
+                    if (!userMessage) return;
+        
+                    // Ensure socket is connected before sending
+                    connectSocket();
+        
+                    addMessageToChat('user', userMessage);
+                    scrollToBottom();
+        
+                    messageInput.value = '';
+                    socket.emit('chat_message', { message: userMessage });
+                    resetInactivityTimer();
+        
+                    createAIMessageContainer();
+                }
+            });
+            
+            document.querySelectorAll('a[target="_blank"]').forEach(a => {
+                a.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    window.open(a.href, '_blank');
+                });
+            });	
+        
+            messageForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const userMessage = messageInput.value.trim();
+                if (!userMessage) return;
+        
+                // Ensure socket is connected before sending
+                connectSocket();
+        
+                addMessageToChat('user', userMessage);
+                scrollToBottom();
+        
+                messageInput.value = '';
+                socket.emit('chat_message', { message: userMessage });
+                resetInactivityTimer();
+        
+                createAIMessageContainer();
+            });    
+        
+            // Add these error handlers immediately after socket initialization
+            socket.on('connect_error', (error) => {
+                console.error('Connection Error:', error);
+                if (error.message.includes('CSRF')) {
+                    console.log('CSRF token error detected, reloading page...');
+                    window.location.reload();
+                }
+            });
+        
+            socket.on('error', (data) => {
+                console.error('Socket Error:', data.message);
+                if (data.message.includes('CSRF')) {
+                    console.log('CSRF token error detected, reloading page...');
+                    window.location.reload();
+                }
+            });
+        
+            // Add disconnect handler
+            socket.on('disconnect', (reason) => {
+                console.log('Socket disconnected:', reason);
+                clearTimeout(inactivityTimeout);
+            });
+
+// Initialize Prism.js for existing content on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Configure Prism.js
+    Prism.plugins.toolbar.registerButton('copy-to-clipboard', {
+        text: 'Copy',
+        onClick: function (env) {
+            const textContent = env.code.textContent;
+            navigator.clipboard.writeText(textContent).then(function() {
+                const button = env.element.querySelector('.copy-to-clipboard-button');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copy-success');
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copy-success');
+                }, 2000);
+            });
+        }
+    });
+    
+    // Highlight existing code blocks on page load
+    Prism.highlightAll();
+});		
+        </script>        
+    </body>
+</html>
