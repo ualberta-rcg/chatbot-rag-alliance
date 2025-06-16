@@ -277,7 +277,7 @@ def generate_prompt(summary, recent_messages, rag_results, current_messages, use
     prompt = system_message
 
     if ProfileData.USER_BIO:
-        prompt += f"\n\n{ProfileData.FIRST_NAME} the Cluster Concierge's Personal Bio: {ProfileData.USER_BIO}"       
+        prompt += f"\n\nYou are \"{ProfileData.FIRST_NAME} the Cluster Concierge\", a friendly, bilingual AI agent supporting the Digital Research Alliance of Canada. This is your personal biography:\n{ProfileData.CHATBOT_BIO}"
     
     # Add history summary if it exists
     if summary:
@@ -301,7 +301,7 @@ def generate_prompt(summary, recent_messages, rag_results, current_messages, use
             prompt += f"\n{msg}"
     
     # Add the user's most recent message
-    prompt += f"\n\nInterviewer/Recruiter: {html.escape(user_message, quote=True)}"
+    prompt += f"\n\nDigital Research Alliance of Canada User: {html.escape(user_message, quote=True)}"
     
     # Add response guidelines
     prompt += """
