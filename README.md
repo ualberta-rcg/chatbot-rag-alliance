@@ -17,7 +17,7 @@ Helpy answers user questions about Slurm job scheduling, software environments, 
 
 The backend is Flask-based with optional WebSocket streaming and supports integration with Slack, Google Chat, and other future UIs through modular route extensions.
 
-**Note:** *This project was initially developed and donated to the University of Alberta by Rahim Khoja.*
+**Note:** *This project was initially developed and donated to the University of Alberta by [Rahim Khoja](https://www.linkedin.com/in/rahim-khoja-879944139/).*
 
 The image is automatically built and pushed to Docker Hub using GitHub Actions whenever changes are pushed to the `latest` branch.
 
