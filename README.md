@@ -99,6 +99,20 @@ git merge main
 git push origin latest
 ```
 
+## 📚 Documentation
+
+This repository includes several supporting documents to help you deploy, configure, and customize Helpy:
+
+| File                           | Purpose                                                                 |
+|--------------------------------|-------------------------------------------------------------------------|
+| [`KUBERNETES-DEPLOYMENT.md`](./KUBERNETES-DEPLOYMENT.md) | Step-by-step guide to deploying Helpy in Kubernetes with TLS and Ingress support |
+| [`ENVIRONMENT-VARIABLES.md`](./ENVIRONMENT-VARIABLES.md) | Full list of supported environment variables, API keys, models, and examples |
+| [`CUSTOMIZATION-GUIDE.md`](./CUSTOMIZATION-GUIDE.md)     | Details on how to modify Helpy’s prompts, SEO metadata, and AI behavior |
+| [`LICENSE`](./LICENSE)                                 | Open-source license (MIT)                                             |
+
+> These files are designed to help new users and deployers get started quickly, and advanced users extend or tailor Helpy to their environment.
+
+
 ## 🤝 Support
 
 Many Bothans died to bring us this information. This project is provided as-is, but reasonable questions may be answered based on my coffee intake or mood. ;)
