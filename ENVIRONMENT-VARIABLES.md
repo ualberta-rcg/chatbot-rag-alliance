@@ -4,73 +4,104 @@
 
 This document lists all environment variables used by **Helpy**, the Alliance Cluster Concierge Chatbot.
 
-Variables are loaded via Kubernetes secrets, `.env` files, or GitHub Actions secrets, depending on your deployment environment.
+Helpy uses a Retrieval-Augmented Generation (RAG) backend and supports a variety of LLM providers. You must define:
+
+✅ Exactly **one** AI provider  
+✅ Two models (`AI_MODEL_A` and `AI_MODEL_B`) — regardless of provider  
+✅ The corresponding API key(s) and URL(s) for your selected provider  
 
 > **Maintainer:** Rahim Khoja · [khoja1@ualberta.ca](mailto:khoja1@ualberta.ca)
 
 ---
 
-| Variable                 | Description                                                                 | Required | Default / Notes                                     |
-|--------------------------|-----------------------------------------------------------------------------|----------|------------------------------------------------------|
-| `SECRET_KEY`             | Flask secret key for session signing                                        | ✅ Yes   | Auto-generates session encryption                   |
-| `LOG_LEVEL`              | Logging verbosity                                                           | ❌ No    | `DEBUG`                                              |
-| `SQLALCHEMY_DATABASE_URI`| SQLAlchemy DB connection string                                              | ❌ No    | `sqlite:///./chat.db`                               |
-| `SQLALCHEMY_TRACK_MODIFICATIONS` | SQLAlchemy setting for change tracking                                  | ❌ No    | `False`                                              |
-| `SYSTEM_MAINTENANCE_MODE`| Enables system maintenance banner (e.g. “Down for updates”)                | ❌ No    | `False`                                              |
+## ✅ Required Variables
+
+| Variable         | Description                                      | Required | Example                      |
+|------------------|--------------------------------------------------|----------|------------------------------|
+| `AI_PROVIDER`    | The LLM backend to use                           | ✅ Yes   | `OPENAI`                     |
+| `AI_MODEL_A`     | Primary model for generating responses           | ✅ Yes   | `gpt-4`                      |
+| `AI_MODEL_B`     | Secondary model for summaries or search queries  | ✅ Yes   | `gpt-4o-mini`                |
+| `SECRET_KEY`     | Flask secret key for session signing             | ✅ Yes   | `a-long-secret-key`          |
 
 ---
 
-### 🔑 API Keys
+## 🔑 Provider-Specific API Keys
 
-| Variable             | Description                                       | Required | Default / Notes                         |
-|----------------------|---------------------------------------------------|----------|------------------------------------------|
-| `OPENAI_API_KEY`     | OpenAI API key for GPT models                     | ✅ Yes   | Needed when `AI_PROVIDER=OPENAI`        |
-| `GROQ_API_KEY`       | GroqCloud API key                                 | ✅ Yes   | Needed when `AI_PROVIDER=GROQCLOUD`     |
-| `ANTHROPIC_API_KEY`  | Claude API key                                    | ✅ Yes   | Needed when `AI_PROVIDER=ANTHROPIC`     |
-| `GOOGLE_AI_API_KEY`  | Gemini / Google AI Studio API key                | ✅ Yes   | Needed when `AI_PROVIDER=GOOGLE`        |
-| `RAGIE_API_KEY`      | Ragie vector search API key                       | ❌ No    | Optional if RAGie is used               |
-| `RAGFLOW_API_KEY`    | RAGFlow API key for vector search                 | ✅ Yes   | Used by default                         |
-| `RAGFLOW_API_URL`    | Base URL for RAGFlow API                          | ✅ Yes   | Example: `https://ragflow.example/api`  |
-| `OLLAMA_BASE_URL`    | Base URL for local Ollama server                 | ❌ No    | Defaults to `http://64.181.202.213:11434` |
+You only need to define the keys for the **AI_PROVIDER** you choose.
 
----
-
-### 🧠 AI Model & Provider
-
-| Variable         | Description                                                | Required | Notes                                  |
-|------------------|------------------------------------------------------------|----------|-----------------------------------------|
-| `AI_PROVIDER`    | The LLM backend to use                                     | ✅ Yes   | Options: `OLLAMA`, `OPENAI`, `GROQCLOUD`, `ANTHROPIC`, `GOOGLE` |
-| `AI_MODEL_A`     | Primary model for generating answers                       | ✅ Yes   | Example: `deepseek-r1:671b`             |
-| `AI_MODEL_B`     | Secondary model used for RAG search queries or summaries   | ✅ Yes   | Example: `command-r-plus:latest`        |
+| Variable             | Description                       | Required if `AI_PROVIDER` = | Notes                             |
+|----------------------|-----------------------------------|------------------------------|-----------------------------------|
+| `OPENAI_API_KEY`     | OpenAI API key                    | `OPENAI`                     | Required for GPT-4, GPT-4o        |
+| `GROQ_API_KEY`       | GroqCloud API key                 | `GROQCLOUD`                  | Required for Mixtral, etc.        |
+| `ANTHROPIC_API_KEY`  | Anthropic Claude API key          | `ANTHROPIC`                  | Required for Claude 3             |
+| `GOOGLE_AI_API_KEY`  | Google Gemini API key             | `GOOGLE`                     | Required for Gemini Pro           |
+| `OLLAMA_BASE_URL`    | Base URL for your Ollama instance | `OLLAMA`                     | e.g., `http://localhost:11434`    |
 
 ---
 
-### 📈 Analytics & SEO (Optional)
+## 📡 RAG Integration (Required)
 
-| Variable                     | Description                              | Required | Notes                              |
-|------------------------------|------------------------------------------|----------|-------------------------------------|
-| `GOOGLE_ANALYTICS_ID`        | Google Analytics tracking ID             | ❌ No    | e.g., `G-XXXXXXX`                   |
-| `GOOGLE_SITE_VERIFICATION`   | Meta tag value for Google Search Console | ❌ No    |                                    |
-| `BING_SITE_VERIFICATION`     | Meta tag value for Bing Webmaster Tools  | ❌ No    |                                    |
+| Variable             | Description                            | Required | Example                                 |
+|----------------------|----------------------------------------|----------|-----------------------------------------|
+| `RAGFLOW_API_KEY`    | API key for RAGFlow vector search      | ✅ Yes   | `rfk-...`                                |
+| `RAGFLOW_API_URL`    | Base URL for RAGFlow API               | ✅ Yes   | `https://ragflow.example.com`           |
+| `RAGIE_API_KEY`      | API key for https://www.ragie.ai/      |           | `tnt_...`                              |
 
----
-
-### 💡 Tips
-
-- You can override environment variables via Helm, Kubernetes secrets, `.env`, or a CI/CD system.
-- Use `None` (case-insensitive) to disable optional analytics fields.
-- Models `AI_MODEL_A` and `AI_MODEL_B` should match the capabilities of your selected `AI_PROVIDER`.
+> 🔍 You do **not** need `RAGIE_API_KEY` unless you're using Ragie (optional).
 
 ---
 
-### Example `.env` file (for local dev)
+## ⚙️ Optional Runtime Settings
+
+| Variable                     | Description                              | Default        |
+|------------------------------|------------------------------------------|----------------|
+| `LOG_LEVEL`                  | Logging verbosity                        | `DEBUG`        |
+| `SQLALCHEMY_DATABASE_URI`    | DB connection URI                        | `sqlite:///./chat.db` |
+| `SQLALCHEMY_TRACK_MODIFICATIONS` | SQLAlchemy setting for change tracking | `False`        |
+| `SYSTEM_MAINTENANCE_MODE`    | Show maintenance banner                  | `False`        |
+
+---
+
+## 📈 SEO & Analytics (Optional)
+
+| Variable                     | Description                              | Notes                      |
+|------------------------------|------------------------------------------|-----------------------------|
+| `GOOGLE_ANALYTICS_ID`        | Google Analytics tracking ID             | e.g., `G-XXXXXXX`           |
+| `GOOGLE_SITE_VERIFICATION`   | Meta tag for Google Search Console       | Use `NONE` to disable       |
+| `BING_SITE_VERIFICATION`     | Meta tag for Bing Webmaster Tools        | Use `NONE` to disable       |
+
+---
+
+## 📄 Example: `.env` for OpenAI
 
 ```env
-SECRET_KEY=mysecretkey123
+# Required
+SECRET_KEY=supersecret123
 AI_PROVIDER=OPENAI
 AI_MODEL_A=gpt-4
-AI_MODEL_B=gpt-3.5-turbo
+AI_MODEL_B=gpt-4o-mini
+
+# OpenAI API
 OPENAI_API_KEY=sk-...
+
+# RAGFlow
+RAGFLOW_API_KEY=rfk-...
+RAGFLOW_API_URL=https://ragflow.example.com
+```
+
+## 📄 Example: `.env` for Ollama
+
+```env
+# Required
+SECRET_KEY=supersecret123
+AI_PROVIDER=OLLAMA
+AI_MODEL_A=llama3
+AI_MODEL_B=mistral
+
+# Ollama (self-hosted or remote)
+OLLAMA_BASE_URL=http://ollama.myserver.local:11434
+
+# RAGFlow
 RAGFLOW_API_KEY=rfk-...
 RAGFLOW_API_URL=https://ragflow.example.com
 ```
