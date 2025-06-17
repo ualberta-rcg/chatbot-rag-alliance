@@ -92,7 +92,7 @@ spec:
           - name: AI_MODEL_B
             value: "o4-mini" # This is used to summerize, and to generate RAG search queries
           - name: RAGFLOW_API_URL
-            value: "https://your-ragflow-endpoint"  # Not required
+            value: "https://your-ragflow-endpoint"  
           - name: SECRET_KEY
             valueFrom:
               secretKeyRef:
