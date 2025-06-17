@@ -10,7 +10,6 @@ Helpy uses a Retrieval-Augmented Generation (RAG) backend and supports a variety
 ✅ Two models (`AI_MODEL_A` and `AI_MODEL_B`) — regardless of provider  
 ✅ The corresponding API key(s) and URL(s) for your selected provider  
 
-> **Maintainer:** Rahim Khoja · [khoja1@ualberta.ca](mailto:khoja1@ualberta.ca)
 
 ---
 
