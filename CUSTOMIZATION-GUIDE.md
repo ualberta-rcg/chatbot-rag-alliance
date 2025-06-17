@@ -6,7 +6,7 @@ This guide explains the customizable files in the `app/` directory. These contro
 
 > These files are safe to edit and allow you to tailor the chatbot's responses, appearance, and tone without modifying core logic.
 
----
+
 
 ## 📁 `app/prompts/` – Prompt Templates
 
@@ -22,7 +22,7 @@ This folder defines the behavior of the chatbot through editable system prompts.
 
 > ✏️ You can rewrite these in plain text — markdown and natural language are supported.
 
----
+
 
 ## 🧠 `app/profile.py` – Chatbot Persona Settings
 
@@ -35,7 +35,7 @@ This module defines key metadata for the chatbot's identity, language support, a
 
 If you want to override how the bot introduces itself or change how responses are formatted, start here.
 
----
+
 
 ## 🌐 `app/seo.py` – SEO Metadata
 
@@ -48,7 +48,7 @@ This file injects values into templates for SEO and web crawlers.
 | `keywords`   | Meta keywords for HTML head section              |
 | `author`     | Optional field for ownership/credit info         |
 
----
+
 
 ## ⚙️ `app/config.py` – Runtime Config Class
 
@@ -66,7 +66,7 @@ It handles:
 
 > ✅ This class reads from environment variables at startup. You do not need to modify this file unless you're changing how configuration is loaded.
 
----
+
 
 ## 🧠 `app/utils/ai_utils.py` – AI Behavior Logic
 
@@ -89,7 +89,7 @@ This is a great place to:
 
 > 🧪 This is the most advanced area of customization and may require Python and LangChain familiarity.
 
----
+
 
 ## ✨ Customization Tips
 
