@@ -1,4 +1,4 @@
-<img src="https://www.ualberta.ca/en/toolkit/media-library/homepage-assets/ua_logo_green_rgb.png" alt="University of Alberta Logo" width="50%" />
+<img src="./assets/ua_logo_green_rgb.png" alt="University of Alberta Logo" width="50%" />
 
 # Helpy – Alliance Cluster Concierge Chatbot
 
